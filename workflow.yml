@@ -5,7 +5,7 @@ uses: bcomnes/deploy-to-neocities@v1.1.13
 on:
   push:
     branches:
-      - master
+      - main
 
 concurrency: # prevent concurrent deploys doing strange things
   group: deploy-to-neocities
