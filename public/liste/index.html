@@ -1,3 +1,159 @@
 <html>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.5/dist/css/foundation.min.css" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.5/dist/js/foundation.min.js" crossorigin="anonymous"></script>
 	<title>Liste</title>
+
+	<div id="root"></div>
+
+	<style>
+		.doll {
+			border: 1px solid black;
+		}
+		.taskList {
+			border: 1px solid black;
+		}
+	</style>
+
+	<script type="text/babel">
+		const root = ReactDOM.createRoot(document.getElementById('root'));
+
+		class Doll extends React.Component {
+			render() {
+				return (
+					<div class="doll text-center">
+						<img src="images/dollz.png" />
+					</div>
+				);
+			}
+		}		
+
+		class TaskList extends React.Component {
+			constructor(props) {
+				super(props);
+				this.state = {
+					tasks: [{name: "Shave my hair", id: 1}, {name: "Shave a hobo", id: 2}],
+					maxID: 3
+				}
+			}
+
+			addTask() {
+				var newTasks = this.state.tasks;
+				newTasks.push({id: this.state.maxID, name: "", isEditing: true}); 
+				this.state.maxID += 1;
+				this.setState({tasks: newTasks});
+			}
+
+			editTask(event, id)	{
+				var newTasks = this.state.tasks;
+				for (var i = 0; i < newTasks.length; i++)
+				{
+					if (newTasks[i].id == id)
+					{
+						newTasks[i].name = event.target.value;
+						//newTasks[i].isEditing = false;
+					}
+				}
+				this.setState({tasks: newTasks});
+			}
+
+			openForEditing(e, id) {
+				var newTasks = this.state.tasks;
+				for (var i = 0; i < newTasks.length; i++)
+				{
+					if (newTasks[i].id == id)
+					{
+						newTasks[i].isEditing = true;
+					}
+				}
+				this.setState({tasks: newTasks});
+			}
+
+			closedForEditing(e, id) {
+				var newTasks = this.state.tasks;
+				for (var i = 0; i < newTasks.length; i++)
+				{
+					if (newTasks[i].id == id)
+					{
+						newTasks[i].isEditing = false;
+					}
+				}
+				this.setState({tasks: newTasks});
+			}			
+
+			close(e, id)
+			{
+				var newTasks = this.state.tasks;
+				for (var i = 0; i < newTasks.length; i++)
+				{
+					if (i < newTasks.length && newTasks[i].id == id)
+					{
+						newTasks.splice(i, 1);
+					}
+				}
+				this.setState({tasks: newTasks});
+				console.log("finished here");
+				alert("You unlocked " + this.randomItem());
+			}
+
+			randomItem()
+			{
+				var items = ["cowboy hat" , "darth vader mask", "bunnygirl ears"];
+				return items[Math.floor((Math.random()*items.length))];
+			}
+
+			render() {
+				return (
+					<div class="taskList">
+						<div class="grid-x grid-padding-x"> 
+							<div class="cell small-3" />
+							<div class="cell small-6">
+								{this.state.tasks.map((task) => {
+										if (task.isEditing) {									
+											return (<div class="callout primary">	
+												<div class="grid-x grid-padding-x">
+													<div class="cell small-6">									
+														<input onChange={(e) => this.editTask(e, task.id)} onBlur={(e) => this.closedForEditing(e, task.id)} type="text" value={task.name}/>	
+													</div>
+												</div>
+											</div>);	
+										} else {
+											return (<div class="callout primary">	
+												<div class="grid-x grid-padding-x">
+													<div class="cell small-6">									
+														{task.name}
+													</div>
+													<div class="cell small-6">
+														<button type="button" class="button" onClick={(e) => this.openForEditing(e, task.id)}> Edit </button>
+														<span>&nbsp;</span>
+														<button type="button" class="button success" onClick={(e) => this.close(e, task.id)}> Finish </button>
+													</div>
+												</div>
+											</div>);											
+										}
+								})}
+								<button class="button" onClick={() => this.addTask()}> Add a task </button>
+							</div>
+							<div class="cell small-3" />
+						</div>
+					</div>	
+				);
+			}
+		}
+
+		class App extends React.Component {
+			render() {
+				return (
+					<div>
+						<Doll />
+						<TaskList />
+					</div>
+				);
+			}
+		}
+
+		root.render(<App />);
+	</script>
 </html>
