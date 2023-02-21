@@ -14,6 +14,7 @@
 		}
 		.taskList {
 			border: 1px solid black;
+			font-size: 25px;
 		}
 	</style>
 
@@ -108,8 +109,8 @@
 				return (
 					<div class="taskList">
 						<div class="grid-x grid-padding-x"> 
-							<div class="cell small-3" />
-							<div class="cell small-6">
+							<div class="cell small-0 large-3" />
+							<div class="cell small-12 large-6">
 								{this.state.tasks.map((task) => {
 										if (task.isEditing) {									
 											return (<div class="callout primary">	
@@ -136,7 +137,7 @@
 								})}
 								<button class="button" onClick={() => this.addTask()}> Add a task </button>
 							</div>
-							<div class="cell small-3" />
+							<div class="cell small-0 large-3" />
 						</div>
 					</div>	
 				);
